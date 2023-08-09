@@ -16,7 +16,7 @@ import csv
 FIELDS = [
     'institution.displayName',
     'institution.schoolType',
-    'ranking.sortRank',
+    'ranking.displayRank',
     'searchData.enrollment.rawValue',
     'searchData.acceptanceRate.rawValue',
     'searchData.hsGpaAvg.rawValue',
