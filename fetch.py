@@ -1,39 +1,32 @@
 import requests
 from bs4 import BeautifulSoup
-
 import json
 import csv
+
+# import logging
+# import http.client
+# http.client.HTTPConnection.debuglevel = 1
+
+# logging.basicConfig() # you need to initialize logging, otherwise you will not see anything from requests
+# logging.getLogger().setLevel(logging.DEBUG)
+# requests_log = logging.getLogger("requests.packages.urllib3")
+# requests_log.setLevel(logging.DEBUG)
+# requests_log.propagate = True
 
 FIELDS = [
     'institution.displayName',
     'institution.schoolType',
-    'institution.aliasNames',
-    'institution.state',
-    'institution.city',
-    'institution.zip',
-    'institution.region',
-    'institution.isPublic',
-    'institution.institutionalControl',
-    'institution.primaryPhotoCard',
-    'ranking.displayRank',
     'ranking.sortRank',
-    'ranking.isTied',
-    'searchData.actAvg.rawValue',
-    'searchData.percentReceivingAid.rawValue',
-    'searchData.acceptanceRate.rawValue',
-    'searchData.tuition.rawValue',
-    'searchData.hsGpaAvg.rawValue',
-    'searchData.engineeringRepScore.rawValue',
-    'searchData.parentRank.rawValue',
     'searchData.enrollment.rawValue',
+    'searchData.acceptanceRate.rawValue',
+    'searchData.hsGpaAvg.rawValue',
+    'searchData.satAvg.displayValue',
+    'searchData.engineeringRepScore.rawValue',
     'searchData.businessRepScore.rawValue',
-    'searchData.satAvg.rawValue',
-    'searchData.costAfterAid.rawValue',
-    'searchData.testAvgs.displayValue.0.value',
-    'searchData.testAvgs.displayValue.1.value'
+    'searchData.computerScienceRepScore.rawValue',
 ]
 
-DETAILED = True
+DETAILED = False
 DETAIL_FIELDS = [
     'School Type',
     'Year Founded',
@@ -45,9 +38,9 @@ DETAIL_FIELDS = [
 ]
 
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:67.0) Gecko/20100101 Firefox/67.0'
+    'User-Agent': "PostmanRuntime/7.32.3",
+    'Accept': "*/*",
 }
-
 
 def traverse(root, path):
     value = root
@@ -58,12 +51,13 @@ def traverse(root, path):
             value = value[segment]
     return value
 
-
 def fetch_results_page(url, writer):
     print('Fetching ' + url + '...')
     resp = requests.get(url, headers=HEADERS)
     json_data = json.loads(resp.text)
     for school in json_data['data']['items']:
+        if traverse(school, 'institution.schoolType') not in ["national-universities", "national-liberal-arts-colleges"]:
+            continue
         row = []
         for field in FIELDS:
             row.append(traverse(school, field))
@@ -86,10 +80,9 @@ def fetch_results_page(url, writer):
         writer.writerow(row)
 
     if json_data['meta']['rel_next_page_url']:
-        fetch_results_page(json_data['meta']['rel_next_page_url'], writer)
+        fetch_results_page(json_data['data']['meta']['rel_next_page_url'], writer)
     else:
         print('Done!')
-
 
 with open('data.csv', 'w') as data_file:
     data_writer = csv.writer(data_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
