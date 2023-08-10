@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Load the CSV file
-csv_path = 'data.csv'
+csv_path = './csv/data.csv'
 df = pd.read_csv(csv_path)
 
 # Drop rows with all NaN values (empty rows)

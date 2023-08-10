@@ -83,7 +83,7 @@ def fetch_results_page(url, writer):
     else:
         print('Done!')
 
-with open('data.csv', 'w') as data_file:
+with open('./csv/data.csv', 'w') as data_file:
     data_writer = csv.writer(data_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     data_writer.writerow(FIELDS + (DETAIL_FIELDS if DETAILED else []))
     fetch_results_page('https://www.usnews.com/best-colleges/api/search?_sort=schoolName&_sortDirection=asc&_page=1',
