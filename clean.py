@@ -12,13 +12,12 @@ column_name_changes = {
     'institution.displayName': 'Institution',
     'institution.schoolType': 'School Type',
     'ranking.displayRank' : 'Rank',
-    'searchData.enrollment.rawValue' : 'Enrollment',
     'searchData.acceptanceRate.rawValue' : 'Acceptance Rate',
-    'searchData.hsGpaAvg.rawValue' : 'Average HS GPA',
-    'searchData.satAvg.displayValue' : 'Average SAT Score',
     'searchData.engineeringRepScore.rawValue' : 'Engineering Rep Score',
     'searchData.businessRepScore.rawValue' : 'Business Rep Score',
     'searchData.computerScienceRepScore.rawValue' : 'Computer Science Rep Score',
+    'searchData.hsGpaAvg.rawValue' : 'Average HS GPA',
+    'searchData.satAvg.displayValue' : 'Average SAT Score',
 }
 
 df.rename(columns=column_name_changes, inplace=True)
@@ -27,6 +26,12 @@ df.rename(columns=column_name_changes, inplace=True)
 df[['25th Percentile SAT Score', '75th Percentile SAT Score']] = df["Average SAT Score"].str.split('-', expand=True)
 
 df.drop(columns=["Average SAT Score"], inplace=True)
+
+# Replace values
+df['School Type'] = df['School Type'].replace({
+    'national-liberal-arts-colleges': 'lac', 
+    'national-universities': 'nu'
+})
 
 # Update three major Rep Scores columns to be numeric
 columns_to_update = ['Engineering Rep Score', 'Business Rep Score', 'Computer Science Rep Score']

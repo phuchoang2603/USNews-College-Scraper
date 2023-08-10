@@ -17,13 +17,12 @@ FIELDS = [
     'institution.displayName',
     'institution.schoolType',
     'ranking.displayRank',
-    'searchData.enrollment.rawValue',
     'searchData.acceptanceRate.rawValue',
-    'searchData.hsGpaAvg.rawValue',
-    'searchData.satAvg.displayValue',
     'searchData.engineeringRepScore.rawValue',
     'searchData.businessRepScore.rawValue',
     'searchData.computerScienceRepScore.rawValue',
+    'searchData.hsGpaAvg.rawValue',
+    'searchData.satAvg.displayValue',
 ]
 
 DETAILED = False
