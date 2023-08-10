@@ -1,2 +1,8 @@
 .idea/
 *.csv
+!ed.csv
+!fin.csv
+*.xlsx
+*.xls
+*.txt
+test.py
